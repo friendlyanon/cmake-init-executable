@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 14,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "ci-build",
+      "binaryDir": "${sourceDir}/build",
+      "hidden": true
+    },
+    {
+      "name": "ci-unix",
+      "generator": "Unix Makefiles",
+      "hidden": true,
+      "inherits": "ci-build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "ci-macos",
+      "inherits": "ci-unix"
+    },
+    {
+      "name": "ci-ubuntu",
+      "inherits": "ci-unix"
+    },
+    {
+      "name": "ci-windows",
+      "inherits": "ci-build",
+      "generator": "Visual Studio 16 2019",
+      "architecture": "x64"
+    }
+  ]
+}
