@@ -16,8 +16,7 @@ include(cmake/variables.cmake)
 # ---- Declare library ----
 
 add_library(
-    executable_lib STATIC
-    include/lib.h
+    executable_lib OBJECT
     source/lib.cpp
 )
 

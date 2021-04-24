@@ -7,6 +7,20 @@
   },
   "configurePresets": [
     {
+      "name": "flags-unix",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": "-Wall -Wextra -pedantic"
+      }
+    },
+    {
+      "name": "flags-windows",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": "/W4 /permissive- /EHsc /volatile:iso /Zc:__cplusplus /Zc:preprocessor /Zc:throwingNew"
+      }
+    },
+    {
       "name": "ci-build",
       "binaryDir": "${sourceDir}/build",
       "hidden": true
@@ -15,9 +29,20 @@
       "name": "ci-unix",
       "generator": "Unix Makefiles",
       "hidden": true,
-      "inherits": "ci-build",
+      "inherits": ["flags-unix", "ci-build"],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "ci-coverage",
+      "inherits": "ci-unix",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Coverage",
+        "CMAKE_CXX_FLAGS_COVERAGE": "-O0 -g --coverage",
+        "CMAKE_EXE_LINKER_FLAGS_COVERAGE": "--coverage",
+        "CMAKE_STATIC_LINKER_FLAGS_COVERAGE": "--coverage",
+        "CMAKE_SHARED_LINKER_FLAGS_COVERAGE": "--coverage"
       }
     },
     {
@@ -30,7 +55,7 @@
     },
     {
       "name": "ci-windows",
-      "inherits": "ci-build",
+      "inherits": ["flags-windows", "ci-build"],
       "generator": "Visual Studio 16 2019",
       "architecture": "x64"
     }
