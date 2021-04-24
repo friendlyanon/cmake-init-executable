@@ -13,13 +13,6 @@ jobs:
   coverage:
     runs-on: ubuntu-latest
 
-    # To enable coverage, go to https://codecov.io/, acquire a token, put it
-    # into your secrets (Settings > Secrets > New repository secret) and delete
-    # the "if" conditional below.
-    # If you do not wish to use codecov, then simply delete this job from the
-    # workflow.
-    if: "false"
-
     steps:
     - uses: actions/checkout@v1
 
