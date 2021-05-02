@@ -48,6 +48,10 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
+    - name: Install static analyzers
+      if: matrix.os == 'ubuntu'
+      run: sudo apt-get install clang-tidy cppcheck -y -q
+
     - name: Configure
       run: cmake --preset=ci-${{ matrix.os }}
 
