@@ -22,7 +22,6 @@ add_library(
 
 target_include_directories(
     executable_lib
-    ${executable_warning_guard}
     PUBLIC
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
 )
@@ -69,3 +68,13 @@ add_custom_target(
     COMMAND "$<TARGET_FILE:executable_executable>"
     VERBATIM
 )
+
+option(BUILD_DOCUMENTATION "Build documentation using Doxygen and m.css" OFF)
+if(BUILD_DOCUMENTATION)
+  include(cmake/docs.cmake)
+endif()
+
+option(ENABLE_COVERAGE "Enable coverage support separate from CTest's" OFF)
+if(ENABLE_COVERAGE)
+  include(cmake/coverage.cmake)
+endif()

@@ -6,10 +6,6 @@
 # consumers can trivially build and package the project
 if(PROJECT_IS_TOP_LEVEL)
   option(executable_DEVELOPER_MODE "Enable developer mode" OFF)
-
-  if("$ENV{CI}")
-    set(executable_DEVELOPER_MODE ON CACHE INTERNAL "")
-  endif()
 endif()
 
 # ---- Warning guard ----

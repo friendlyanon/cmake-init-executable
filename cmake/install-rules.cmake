@@ -16,16 +16,16 @@ write_basic_package_version_file(
     COMPATIBILITY SameMajorVersion
 )
 
+# Allow package maintainers to freely override the path for the configs
 set(
     executable_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/executable"
     CACHE STRING "CMake package config location relative to the install prefix"
 )
-
 mark_as_advanced(executable_INSTALL_CMAKEDIR)
 
 install(
     FILES
-    "${PROJECT_SOURCE_DIR}/cmake/executableConfig.cmake"
+    cmake/executableConfig.cmake
     "${PROJECT_BINARY_DIR}/executableConfigVersion.cmake"
     DESTINATION "${executable_INSTALL_CMAKEDIR}"
     COMPONENT executable_Development

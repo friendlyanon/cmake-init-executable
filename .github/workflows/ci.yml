@@ -24,67 +24,42 @@ jobs:
       run: cmake --preset=ci-coverage
 
     - name: Build
-      run: cmake --build build -j 2
+      run: cmake --build build/coverage -j 2
 
     - name: Test
-      working-directory: build
+      working-directory: build/coverage
+      run: ctest --output-on-failure -j 2
+
+    - name: Process coverage info
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        PS4: "\e[36m+++\e[0m "
       run: |
-        set -x
-        ctest --output-on-failure
-        lcov -c -d .. -o coverage.info --include '${{ github.workspace }}/*'
-        lcov --list coverage.info
-        bash <(curl -s https://codecov.io/bash) -f coverage.info
+        cmake --build build/coverage -t coverage
+        bash <(curl -s https://codecov.io/bash) -f build/coverage/coverage.info
 
   sanitize:
-    name: sanitize (${{ matrix.name }})
-
-    strategy:
-      fail-fast: false
-
-      matrix:
-        name: [address, undefined, memory]
-
-        include:
-        - name: address
-          flags: -fno-common
-          options: "{ \"ASAN_OPTIONS\": \"\
-            strict_string_checks=1:\
-            detect_stack_use_after_return=1:\
-            check_initialization_order=1:\
-            strict_init_order=1:\
-            detect_leaks=1\" }"
-
-        - name: undefined
-          options: '{ "UBSAN_OPTIONS": "print_stacktrace=1" }'
-
-        - name: memory
-          flags: -fsanitize-memory-track-origins=2
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v1
 
     - name: Configure
-      env:
-        SANITIZER: ${{ matrix.name }}
-        EXTRA_FLAGS: ${{ matrix.flags }}
-        CXX: clang++-11
-      run: cmake --preset=ci-sanitizer
+      env: { CXX: clang++-11 }
+      run: cmake --preset=ci-sanitize
 
     - name: Build
-      run: cmake --build build -j 2
-
-    - name: Add LLVM tools to PATH
-      run: echo /usr/lib/llvm-11/bin >> "$GITHUB_PATH"
+      run: cmake --build build/sanitize -j 2
 
     - name: Test
-      working-directory: build
-      env: ${{ fromJSON(matrix.options || '{}') }}
-      run: ctest --output-on-failure
+      working-directory: build/sanitize
+      env:
+        ASAN_OPTIONS: "strict_string_checks=1:\
+          detect_stack_use_after_return=1:\
+          check_initialization_order=1:\
+          strict_init_order=1:\
+          detect_leaks=1"
+        UBSAN_OPTIONS: print_stacktrace=1
+      run: ctest --output-on-failure -j 2
 
   test:
     strategy:
@@ -111,4 +86,36 @@ jobs:
 
     - name: Test
       working-directory: build
-      run: ctest -C Release -j 2
+      run: ctest --output-on-failure -C Release -j 2
+
+  docs:
+    # Deploy docs only when builds succeed
+    needs: [sanitize, test]
+
+    runs-on: ubuntu-latest
+
+    if: github.ref == 'refs/heads/master'
+      && github.event_name == 'push'
+      && github.repository_owner == 'friendlyanon'
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - uses: actions/setup-python@v2
+      with: { python-version: "3.8" }
+
+    - name: Install Doxygen
+      run: sudo apt-get update -q
+        && sudo apt-get install doxygen -q -y
+
+    - name: Configure
+      run: cmake --preset=ci-ubuntu -D BUILD_DOCUMENTATION=ON
+
+    - name: Build docs
+      run: cmake --build build -t docs
+
+    - name: Deploy docs
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build/docs/html

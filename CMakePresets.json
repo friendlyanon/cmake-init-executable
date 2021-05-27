@@ -7,6 +7,13 @@
   },
   "configurePresets": [
     {
+      "name": "dev-mode",
+      "hidden": true,
+      "cacheVariables": {
+        "executable_DEVELOPER_MODE": "ON"
+      }
+    },
+    {
       "name": "cppcheck",
       "hidden": true,
       "cacheVariables": {
@@ -36,55 +43,66 @@
       }
     },
     {
-      "name": "ci-build",
-      "binaryDir": "${sourceDir}/build",
-      "hidden": true
-    },
-    {
       "name": "ci-unix",
       "generator": "Unix Makefiles",
       "hidden": true,
-      "inherits": ["flags-unix", "ci-build"],
+      "inherits": "flags-unix",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
       }
     },
     {
       "name": "ci-win64",
-      "inherits": ["flags-windows", "ci-build"],
+      "inherits": "flags-windows",
       "generator": "Visual Studio 16 2019",
       "architecture": "x64",
       "hidden": true
     },
     {
-      "name": "ci-coverage",
+      "name": "coverage-unix",
+      "binaryDir": "${sourceDir}/build/coverage",
       "inherits": "ci-unix",
+      "hidden": true,
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Coverage",
-        "CMAKE_CXX_FLAGS_COVERAGE": "-O0 -g --coverage -fkeep-inline-functions -fkeep-static-functions",
+        "CMAKE_CXX_FLAGS_COVERAGE": "-Og -g --coverage -fkeep-inline-functions -fkeep-static-functions",
         "CMAKE_EXE_LINKER_FLAGS_COVERAGE": "--coverage",
         "CMAKE_SHARED_LINKER_FLAGS_COVERAGE": "--coverage"
       }
     },
     {
-      "name": "ci-sanitizer",
-      "inherits": "ci-unix",
+      "name": "ci-coverage",
+      "inherits": ["coverage-unix", "dev-mode"],
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Sanitizer",
-        "CMAKE_CXX_FLAGS_SANITIZER": "-O2 -g -fsanitize=$env{SANITIZER} -fno-omit-frame-pointer $env{EXTRA_FLAGS}"
+        "ENABLE_COVERAGE": "ON",
+        "COVERAGE_HTML_COMMAND": ""
       }
     },
     {
+      "name": "ci-sanitize",
+      "binaryDir": "${sourceDir}/build/sanitize",
+      "inherits": ["ci-unix", "dev-mode"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Sanitize",
+        "CMAKE_CXX_FLAGS_SANITIZE": "-O2 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-common"
+      }
+    },
+    {
+      "name": "ci-build",
+      "binaryDir": "${sourceDir}/build",
+      "hidden": true
+    },
+    {
       "name": "ci-macos",
-      "inherits": "ci-unix"
+      "inherits": ["ci-build", "ci-unix", "dev-mode"]
     },
     {
       "name": "ci-ubuntu",
-      "inherits": ["ci-unix", "clang-tidy", "cppcheck"]
+      "inherits": ["ci-build", "ci-unix", "clang-tidy", "cppcheck", "dev-mode"]
     },
     {
       "name": "ci-windows",
-      "inherits": "ci-win64"
+      "inherits": ["ci-build", "ci-win64", "dev-mode"]
     }
   ]
 }
