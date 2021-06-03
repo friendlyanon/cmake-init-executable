@@ -3,7 +3,8 @@
 
 #include <lib.h>
 
-int main() {
+auto main() -> int
+{
   library lib;
   std::string message = "Hello from " + lib.name + "!";
   std::cout << message << '\n';

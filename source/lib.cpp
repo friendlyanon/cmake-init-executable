@@ -1,4 +1,6 @@
 #include <lib.h>
 
-library::library() : name("executable")
-{}
+library::library()
+    : name("executable")
+{
+}

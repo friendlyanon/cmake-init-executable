@@ -10,8 +10,21 @@ on:
     - master
 
 jobs:
-  coverage:
+  lint:
     runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Lint
+      run: cmake -D FORMAT_COMMAND=clang-format-11 -P cmake/lint.cmake
+
+  coverage:
+    needs: [lint]
+
+    runs-on: ubuntu-latest
+
+    if: github.repository_owner == 'friendlyanon'
 
     steps:
     - uses: actions/checkout@v1
@@ -31,13 +44,16 @@ jobs:
       run: ctest --output-on-failure -j 2
 
     - name: Process coverage info
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      run: |
-        cmake --build build/coverage -t coverage
-        bash <(curl -s https://codecov.io/bash) -f build/coverage/coverage.info
+      run: cmake --build build/coverage -t coverage
+
+    - name: Submit to codecov.io
+      uses: codecov/codecov-action@v1
+      with:
+        file: build/coverage/coverage.info
 
   sanitize:
+    needs: [lint]
+
     runs-on: ubuntu-latest
 
     steps:
@@ -62,6 +78,8 @@ jobs:
       run: ctest --output-on-failure -j 2
 
   test:
+    needs: [lint]
+
     strategy:
       matrix:
         os: [macos, ubuntu, windows]

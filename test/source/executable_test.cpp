@@ -1,6 +1,7 @@
 #include <lib.h>
 
-int main() {
+auto main() -> int
+{
   library lib;
 
   return lib.name == "executable" ? 0 : 1;
