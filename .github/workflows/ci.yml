@@ -16,8 +16,17 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
+    - uses: actions/setup-python@v2
+      with: { python-version: "3.8" }
+
+    - name: Install codespell
+      run: pip3 install codespell
+
     - name: Lint
       run: cmake -D FORMAT_COMMAND=clang-format-11 -P cmake/lint.cmake
+
+    - name: Spell check
+      run: cmake -P cmake/spell.cmake
 
   coverage:
     needs: [lint]
