@@ -2,6 +2,8 @@
 # depends on being added from it, i.e. the testing is done only from the build
 # tree and is not feasible from an install location
 
+project(executableTests)
+
 add_executable(executable_test source/executable_test.cpp)
 target_link_libraries(executable_test PRIVATE executable_lib)
 target_compile_features(executable_test PRIVATE cxx_std_17)

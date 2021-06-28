@@ -23,7 +23,7 @@ add_library(
 target_include_directories(
     executable_lib
     PUBLIC
-    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
+    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/source>"
 )
 
 target_compile_features(executable_lib PUBLIC cxx_std_17)
@@ -69,8 +69,8 @@ add_custom_target(
     VERBATIM
 )
 
-option(BUILD_DOCUMENTATION "Build documentation using Doxygen and m.css" OFF)
-if(BUILD_DOCUMENTATION)
+option(BUILD_MCSS_DOCS "Build documentation using Doxygen and m.css" OFF)
+if(BUILD_MCSS_DOCS)
   include(cmake/docs.cmake)
 endif()
 
