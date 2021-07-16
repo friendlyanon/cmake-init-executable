@@ -491,6 +491,11 @@ var Search = {
         return this.escape(name).replace(/[:=]/g, '&lrm;$&').replace(/(\)|&gt;|&amp;|\/)/g, '&lrm;$&&lrm;');
     },
 
+    isDesktop: function() {
+        let match = window.matchMedia || window.msMatchMedia;
+        return match == null ? true : match('(any-pointer:fine)').matches;
+    },
+
     renderResults: /* istanbul ignore next */ function(resultsSuggestedTabAutocompletion) {
         if(!this.searchString.length) {
             document.getElementById('search-help').style.display = 'block';
@@ -529,15 +534,17 @@ var Search = {
             document.getElementById('search-results').innerHTML = this.fromUtf8(list);
             document.getElementById('search-current').scrollIntoView(true);
 
-            /* Append the suggested tab autocompletion, if any, and if the user
-               didn't just delete it */
-            let searchInput = document.getElementById('search-input');
-            if(this.autocompleteNextInputEvent && resultsSuggestedTabAutocompletion[1].length && searchInput.selectionEnd == searchInput.value.length) {
-                let suggestedTabAutocompletion = this.fromUtf8(resultsSuggestedTabAutocompletion[1]);
+            if(this.isDesktop()) {
+                /* Append the suggested tab autocompletion, if any, and if the user
+                   didn't just delete it */
+                let searchInput = document.getElementById('search-input');
+                if(this.autocompleteNextInputEvent && resultsSuggestedTabAutocompletion[1].length && searchInput.selectionEnd == searchInput.value.length) {
+                    let suggestedTabAutocompletion = this.fromUtf8(resultsSuggestedTabAutocompletion[1]);
 
-                let lengthBefore = searchInput.value.length;
-                searchInput.value += suggestedTabAutocompletion;
-                searchInput.setSelectionRange(lengthBefore, searchInput.value.length);
+                    let lengthBefore = searchInput.value.length;
+                    searchInput.value += suggestedTabAutocompletion;
+                    searchInput.setSelectionRange(lengthBefore, searchInput.value.length);
+                }
             }
 
         /* Nothing found */
