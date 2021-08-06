@@ -45,7 +45,9 @@ target_link_libraries(executable_executable PRIVATE executable_lib)
 
 # ---- Install rules ----
 
-include(cmake/install-rules.cmake)
+if(NOT CMAKE_SKIP_INSTALL_RULES)
+  include(cmake/install-rules.cmake)
+endif()
 
 # ---- Developer mode ----
 
@@ -58,26 +60,4 @@ elseif(NOT PROJECT_IS_TOP_LEVEL)
   )
 endif()
 
-include(CTest)
-if(BUILD_TESTING)
-  add_subdirectory(test)
-endif()
-
-add_custom_target(
-    run_exe
-    COMMAND "$<TARGET_FILE:executable_executable>"
-    VERBATIM
-)
-
-option(BUILD_MCSS_DOCS "Build documentation using Doxygen and m.css" OFF)
-if(BUILD_MCSS_DOCS)
-  include(cmake/docs.cmake)
-endif()
-
-option(ENABLE_COVERAGE "Enable coverage support separate from CTest's" OFF)
-if(ENABLE_COVERAGE)
-  include(cmake/coverage.cmake)
-endif()
-
-include(cmake/lint-targets.cmake)
-include(cmake/spell-targets.cmake)
+include(cmake/dev-mode.cmake)

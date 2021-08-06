@@ -73,7 +73,7 @@ ForEachMacros:
 IncludeBlocks: Regroup
 IncludeCategories:
   # Standard library headers come before anything else
-  - Regex: '^<[a-z]+>'
+  - Regex: '^<[a-z_]+>'
     Priority: -1
   - Regex: '^<.+\.h(pp)?>'
     Priority: 1
