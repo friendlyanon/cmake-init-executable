@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-include(cmake/in-source-guard.cmake)
+include(cmake/prelude.cmake)
 
 project(
     executable
@@ -9,6 +9,8 @@ project(
     HOMEPAGE_URL "https://example.com/"
     LANGUAGES CXX
 )
+
+docs_early_return()
 
 include(cmake/project-is-top-level.cmake)
 include(cmake/variables.cmake)
@@ -21,7 +23,7 @@ add_library(
 )
 
 target_include_directories(
-    executable_lib
+    executable_lib ${executable_warning_guard}
     PUBLIC
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/source>"
 )
