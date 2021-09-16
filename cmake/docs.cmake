@@ -10,18 +10,15 @@ endmacro()
 
 # ---- Dependencies ----
 
-set(mcss_SOURCE_DIR "${PROJECT_BINARY_DIR}/mcss")
 include(FetchContent)
 FetchContent_Declare(
     mcss URL
     https://github.com/friendlyanon/m.css/releases/download/release-1/mcss.zip
     URL_MD5 00cd2757ebafb9bcba7f5d399b3bec7f
-    SOURCE_DIR "${mcss_SOURCE_DIR}"
+    SOURCE_DIR "${PROJECT_BINARY_DIR}/mcss"
+    UPDATE_DISCONNECTED YES
 )
-if(NOT IS_DIRECTORY "${mcss_SOURCE_DIR}")
-  message(STATUS "Downloading m.css")
-  FetchContent_Populate(mcss)
-endif()
+FetchContent_MakeAvailable(mcss)
 
 find_package(Python3 3.6 REQUIRED)
 
@@ -43,6 +40,9 @@ set(config "${working_dir}/conf.py")
 
 add_custom_target(
     docs
+    COMMAND "${CMAKE_COMMAND}" -E remove_directory
+    "${DOXYGEN_OUTPUT_DIRECTORY}/html"
+    "${DOXYGEN_OUTPUT_DIRECTORY}/xml"
     COMMAND "${Python3_EXECUTABLE}" "${mcss_script}" "${config}"
     COMMENT "Building documentation using Doxygen and m.css"
     WORKING_DIRECTORY "${working_dir}"
