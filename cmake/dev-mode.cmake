@@ -4,10 +4,11 @@ if(BUILD_TESTING)
 endif()
 
 add_custom_target(
-    run_exe
-    COMMAND "$<TARGET_FILE:executable_executable>"
+    run-exe
+    COMMAND executable_executable
     VERBATIM
 )
+add_dependencies(run-exe executable_executable)
 
 option(BUILD_MCSS_DOCS "Build documentation using Doxygen and m.css" OFF)
 if(BUILD_MCSS_DOCS)
