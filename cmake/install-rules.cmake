@@ -9,7 +9,7 @@ include(GNUInstallDirs)
 set(package executable)
 
 install(
-    TARGETS executable_executable
+    TARGETS executable_exe
     EXPORT executableTargets
     RUNTIME COMPONENT executable_Runtime
 )

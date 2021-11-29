@@ -9,3 +9,5 @@ target_link_libraries(executable_test PRIVATE executable_lib)
 target_compile_features(executable_test PRIVATE cxx_std_17)
 
 add_test(NAME executable_test COMMAND executable_test)
+
+add_folders(Test)

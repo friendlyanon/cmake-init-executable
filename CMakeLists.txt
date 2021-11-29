@@ -23,7 +23,7 @@ add_library(
 )
 
 target_include_directories(
-    executable_lib ${executable_warning_guard}
+    executable_lib ${warning_guard}
     PUBLIC
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/source>"
 )
@@ -32,18 +32,18 @@ target_compile_features(executable_lib PUBLIC cxx_std_17)
 
 # ---- Declare executable ----
 
-add_executable(executable_executable source/main.cpp)
-add_executable(executable::executable ALIAS executable_executable)
+add_executable(executable_exe source/main.cpp)
+add_executable(executable::exe ALIAS executable_exe)
 
 set_target_properties(
-    executable_executable PROPERTIES
+    executable_exe PROPERTIES
     OUTPUT_NAME executable
-    EXPORT_NAME executable
+    EXPORT_NAME exe
 )
 
-target_compile_features(executable_executable PRIVATE cxx_std_17)
+target_compile_features(executable_exe PRIVATE cxx_std_17)
 
-target_link_libraries(executable_executable PRIVATE executable_lib)
+target_link_libraries(executable_exe PRIVATE executable_lib)
 
 # ---- Install rules ----
 

@@ -1,3 +1,5 @@
+include(cmake/folders.cmake)
+
 include(CTest)
 if(BUILD_TESTING)
   add_subdirectory(test)
@@ -5,10 +7,10 @@ endif()
 
 add_custom_target(
     run-exe
-    COMMAND executable_executable
+    COMMAND executable_exe
     VERBATIM
 )
-add_dependencies(run-exe executable_executable)
+add_dependencies(run-exe executable_exe)
 
 option(BUILD_MCSS_DOCS "Build documentation using Doxygen and m.css" OFF)
 if(BUILD_MCSS_DOCS)
@@ -26,3 +28,5 @@ endif()
 
 include(cmake/lint-targets.cmake)
 include(cmake/spell-targets.cmake)
+
+add_folders(Project)
