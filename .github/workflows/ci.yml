@@ -92,19 +92,20 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos, ubuntu, windows]
+        os: [macos-latest, ubuntu-latest, windows-2022]
 
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Install static analyzers
-      if: matrix.os == 'ubuntu'
+      if: matrix.os == 'ubuntu-latest'
       run: sudo apt-get install clang-tidy cppcheck -y -q
 
     - name: Configure
-      run: cmake --preset=ci-${{ matrix.os }}
+      shell: pwsh
+      run: cmake "--preset=ci-$("${{ matrix.os }}".split("-")[0])"
 
     - name: Build
       run: cmake --build build --config Release -j 2
@@ -140,8 +141,8 @@ jobs:
         && sudo apt-get install doxygen -q -y
 
     - name: Build docs
-      run: cmake -B build -D "CMAKE_PROJECT_INCLUDE=$PWD/cmake/docs.cmake"
-        && cmake --build build --target docs
+      run: cmake "-DPROJECT_SOURCE_DIR=$PWD" "-DPROJECT_BINARY_DIR=$PWD/build"
+        -P cmake/docs-ci.cmake
 
     - name: Deploy docs
       uses: peaceiris/actions-gh-pages@v3
