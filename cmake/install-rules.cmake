@@ -1,7 +1,3 @@
-if(PROJECT_IS_TOP_LEVEL)
-  set(CMAKE_INSTALL_INCLUDEDIR include/executable CACHE PATH "")
-endif()
-
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
@@ -10,7 +6,6 @@ set(package executable)
 
 install(
     TARGETS executable_exe
-    EXPORT executableTargets
     RUNTIME COMPONENT executable_Runtime
 )
 
@@ -27,22 +22,20 @@ set(
 mark_as_advanced(executable_INSTALL_CMAKEDIR)
 
 install(
-    FILES cmake/install-config.cmake
-    DESTINATION "${executable_INSTALL_CMAKEDIR}"
-    RENAME "${package}Config.cmake"
-    COMPONENT executable_Development
-)
-
-install(
     FILES "${PROJECT_BINARY_DIR}/${package}ConfigVersion.cmake"
     DESTINATION "${executable_INSTALL_CMAKEDIR}"
     COMPONENT executable_Development
 )
 
+# Export variables for the install script to use
+install(CODE "
+set(executable_NAME [[$<TARGET_FILE_NAME:executable_exe>]])
+set(executable_INSTALL_CMAKEDIR [[${executable_INSTALL_CMAKEDIR}]])
+set(CMAKE_INSTALL_BINDIR [[${CMAKE_INSTALL_BINDIR}]])
+" COMPONENT executable_Development)
+
 install(
-    EXPORT executableTargets
-    NAMESPACE executable::
-    DESTINATION "${executable_INSTALL_CMAKEDIR}"
+    SCRIPT cmake/install-script.cmake
     COMPONENT executable_Development
 )
 
