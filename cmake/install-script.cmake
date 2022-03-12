@@ -10,9 +10,13 @@ set(config_file "${config_dir}/executableConfig.cmake")
 
 message(STATUS "Installing: ${config_file}")
 file(WRITE "${config_file}" "\
-set(
-    EXECUTABLE_EXECUTABLE
+get_filename_component(
+    _executable_executable
     \"\${CMAKE_CURRENT_LIST_DIR}/${relative_path}\"
+    ABSOLUTE
+)
+set(
+    EXECUTABLE_EXECUTABLE \"\${_executable_executable}\"
     CACHE FILEPATH \"Path to the executable executable\"
 )
 ")
