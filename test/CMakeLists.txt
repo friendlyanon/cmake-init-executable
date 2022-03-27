@@ -4,10 +4,14 @@
 
 project(executableTests LANGUAGES CXX)
 
+# ---- Tests ----
+
 add_executable(executable_test source/executable_test.cpp)
 target_link_libraries(executable_test PRIVATE executable_lib)
 target_compile_features(executable_test PRIVATE cxx_std_17)
 
 add_test(NAME executable_test COMMAND executable_test)
+
+# ---- End-of-file commands ----
 
 add_folders(Test)
