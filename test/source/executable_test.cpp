@@ -2,7 +2,7 @@
 
 auto main() -> int
 {
-  library lib;
+  auto const lib = library {};
 
   return lib.name == "executable" ? 0 : 1;
 }

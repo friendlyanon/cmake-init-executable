@@ -87,7 +87,11 @@ cmake --build --preset=dev
 ctest --preset=dev
 ```
 
-Please note that both the build and test command accepts a `-j` flag to specify
+If you are using a compatible editor (e.g. VSCode) or IDE (e.g. CLion, VS), you
+will also be able to select the above created user presets for automatic
+integration.
+
+Please note that both the build and test commands accept a `-j` flag to specify
 the number of jobs to use, which should ideally be specified to the number of
 threads your CPU has. You may also want to add that to your preset using the
 `jobs` property, see the [presets documentation][1] for more details.
@@ -100,7 +104,7 @@ additional `-t <target>` flag:
 #### `coverage`
 
 Available if `ENABLE_COVERAGE` is enabled. This target processes the output of
-the previously run tests when build with coverage configuration. The commands
+the previously run tests when built with coverage configuration. The commands
 this target runs can be found in the `COVERAGE_TRACE_COMMAND` and
 `COVERAGE_HTML_COMMAND` cache variables. The trace command produces an info
 file by default, which can be submitted to services with CI integration. The

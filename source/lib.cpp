@@ -1,6 +1,6 @@
 #include "lib.hpp"
 
 library::library()
-    : name("executable")
+    : name {"executable"}
 {
 }
