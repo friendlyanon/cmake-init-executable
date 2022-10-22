@@ -33,11 +33,7 @@ target_compile_features(executable_lib PUBLIC cxx_std_17)
 add_executable(executable_exe source/main.cpp)
 add_executable(executable::exe ALIAS executable_exe)
 
-set_target_properties(
-    executable_exe PROPERTIES
-    OUTPUT_NAME executable
-    EXPORT_NAME exe
-)
+set_property(TARGET executable_exe PROPERTY OUTPUT_NAME executable)
 
 target_compile_features(executable_exe PRIVATE cxx_std_17)
 

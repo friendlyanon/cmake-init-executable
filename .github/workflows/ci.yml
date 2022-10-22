@@ -14,9 +14,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - uses: actions/setup-python@v2
+    - uses: actions/setup-python@v4
       with: { python-version: "3.8" }
 
     - name: Install codespell
@@ -37,7 +37,7 @@ jobs:
     if: github.repository_owner == 'friendlyanon'
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Install LCov
       run: sudo apt-get update -q
@@ -57,7 +57,7 @@ jobs:
       run: cmake --build build/coverage -t coverage
 
     - name: Submit to codecov.io
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v3
       with:
         file: build/coverage/coverage.info
 
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Configure
       env: { CXX: clang++-12 }
@@ -97,11 +97,16 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Install static analyzers
       if: matrix.os == 'ubuntu-latest'
-      run: sudo apt-get install clang-tidy cppcheck -y -q
+      run: >-
+        sudo apt-get install clang-tidy-12 cppcheck -y -q
+
+        sudo update-alternatives --install
+        /usr/bin/clang-tidy clang-tidy
+        /usr/bin/clang-tidy-12 120
 
     - name: Configure
       shell: pwsh
@@ -128,9 +133,9 @@ jobs:
       && github.repository_owner == 'friendlyanon'
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - uses: actions/setup-python@v2
+    - uses: actions/setup-python@v4
       with: { python-version: "3.8" }
 
     - name: Install m.css dependencies

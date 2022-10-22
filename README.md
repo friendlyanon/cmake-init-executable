@@ -1,2 +1,2 @@
 This project is an example output of
-[cmake-init](https://github.com/friendlyanon/cmake-init) version 0.31.2
+[cmake-init](https://github.com/friendlyanon/cmake-init) version 0.32.0
