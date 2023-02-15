@@ -68,8 +68,9 @@ the project:
 ```
 
 You should replace `<os>` in your newly created presets file with the name of
-the operating system you have, which may be `win64` or `unix`. You can see what
-these correspond to in the [`CMakePresets.json`](CMakePresets.json) file.
+the operating system you have, which may be `win64`, `linux` or `darwin`. You
+can see what these correspond to in the
+[`CMakePresets.json`](CMakePresets.json) file.
 
 `CMakeUserPresets.json` is also the perfect place in which you can put all
 sorts of things that you would otherwise want to pass to the configure command
@@ -108,7 +109,7 @@ the previously run tests when built with coverage configuration. The commands
 this target runs can be found in the `COVERAGE_TRACE_COMMAND` and
 `COVERAGE_HTML_COMMAND` cache variables. The trace command produces an info
 file by default, which can be submitted to services with CI integration. The
-HTML command uses the trace command's output to generate a HTML document to
+HTML command uses the trace command's output to generate an HTML document to
 `<binary-dir>/coverage_html` by default.
 
 #### `docs`
