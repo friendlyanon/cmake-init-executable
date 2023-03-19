@@ -66,11 +66,12 @@ jobs:
 
     runs-on: ubuntu-22.04
 
+    env: { CXX: clang++-14 }
+
     steps:
     - uses: actions/checkout@v3
 
     - name: Configure
-      env: { CXX: clang++-14 }
       run: cmake --preset=ci-sanitize
 
     - name: Build
