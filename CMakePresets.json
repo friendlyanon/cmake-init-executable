@@ -81,21 +81,18 @@
     },
     {
       "name": "ci-linux",
+      "inherits": ["flags-gcc-clang", "ci-std"],
       "generator": "Unix Makefiles",
       "hidden": true,
-      "inherits": ["flags-gcc-clang", "ci-std"],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
       }
     },
     {
       "name": "ci-darwin",
-      "generator": "Unix Makefiles",
-      "hidden": true,
       "inherits": ["flags-appleclang", "ci-std"],
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
-      }
+      "generator": "Xcode",
+      "hidden": true
     },
     {
       "name": "ci-win64",
@@ -139,8 +136,16 @@
       "hidden": true
     },
     {
+      "name": "ci-multi-config",
+      "description": "Speed up multi-config generators by generating only one configuration instead of the defaults",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_CONFIGURATION_TYPES": "Release"
+      }
+    },
+    {
       "name": "ci-macos",
-      "inherits": ["ci-build", "ci-darwin", "dev-mode"]
+      "inherits": ["ci-build", "ci-darwin", "dev-mode", "ci-multi-config"]
     },
     {
       "name": "ci-ubuntu",
@@ -148,7 +153,7 @@
     },
     {
       "name": "ci-windows",
-      "inherits": ["ci-build", "ci-win64", "dev-mode"]
+      "inherits": ["ci-build", "ci-win64", "dev-mode", "ci-multi-config"]
     }
   ]
 }
